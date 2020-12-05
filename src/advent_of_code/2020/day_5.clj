@@ -54,3 +54,31 @@
                    (contains? seat-ids (dec %))
                    (not (contains? seat-ids %)))
              (range min-id max-id)))))
+
+;; =================================================================
+;; High Performance Version
+
+(def ticket->int-xf
+  "Transducer for turning ticket strings into their integer ids."
+  (comp (map (partial map {\B \1 \F \0 \R \1 \L \0}))
+        (map (partial apply str))
+        (map #(Integer/parseInt % 2))))
+
+(defn part-1'
+  "Solve part 1 of the puzzle."
+  []
+  (let [input (file-lines "day-5.txt")]
+    (transduce ticket->int-xf max 0 input)))
+
+(defn part-2'
+  "Solve part 2 of the puzzle."
+  []
+  (let [input (file-lines "day-5.txt")
+        ids (sort <= (sequence (comp ticket->int-xf) input))]
+    (reduce
+     (fn [cur next]
+       (if (= next (+ cur 2))
+         (reduced (inc cur))
+         next))
+     (first ids)
+     (rest ids))))
