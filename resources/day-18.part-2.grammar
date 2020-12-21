@@ -1,0 +1,8 @@
+Expr = <W?> (AddExpr | MulExpr | Parenthetical | Val) <W?>
+MulExpr = MulOperand (<W?> <"*"> <W?> MulOperand)+
+MulOperand = (AddExpr | Parenthetical | Val)
+AddExpr = AddOperand (<W?> <"+"> <W?> AddOperand)+
+AddOperand = (Val | Parenthetical)
+Val = #"\d+"
+Parenthetical = <"("> Expr <")">
+W = #"\s+" (* Whitespace *)

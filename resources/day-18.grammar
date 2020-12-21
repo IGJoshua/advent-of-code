@@ -1,0 +1,6 @@
+Expr = <W?> Operand (<W?> Op <W?> Operand)+ <W?>
+Operand = Parenthetical | Val
+Op = ("+" | "-" | "/" | "*")
+Val = #"\d+"
+Parenthetical = <"("> Expr <")">
+W = #"\s+" (* Whitespace *)
